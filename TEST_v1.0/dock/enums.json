@@ -1,0 +1,18 @@
+{
+    "meta-data": {
+        "version": 1.0,
+        "ability": "Create"
+    },
+    "CREATE": {
+        "handler": "create_deferr"
+    },
+    "READ": {
+        "handler": "read_deferr"
+    },
+    "UPDATE": {
+        "handler": "update_deferr"
+    },
+    "DELETE": {
+        "handler": "delete_deferr"
+    }
+}
