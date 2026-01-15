@@ -20,14 +20,14 @@ deferred.add_middleware(
 )
 
 @deferred.get("/tasks")
-def return_uuid(payload: dict | None = None) -> dict:
+def return_uuid() -> dict:
     uuid_string = str(uuid4())
     clear_tasks()
-    TASKS[uuid_string] = payload
+    TASKS["id"] = uuid_string
     return {"id": uuid_string}
 
 @deferred.post("/tasks/{id}")
-def process(payload: dict) -> dict:
+def process(id:str, payload: dict) -> dict:
     if id not in TASKS.keys():
-        raise HTTPException('404', "Wrong id")
-        
+        raise HTTPException(status_code=404, detail="Wrong id")
+    return payload    
