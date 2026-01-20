@@ -4,8 +4,8 @@ Docstring for TEST_v1.0.dock.enums
 stores enums, filters and serves functions
 '''
 
-from ..Engine.operation import create
-from ..Utility.logger import loggy
+from Engine.operation import create
+from Utility.logger import loggy
 
 def log(msg: str):
     loggy(local="dock/enums", log=msg)
