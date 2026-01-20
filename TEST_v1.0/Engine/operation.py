@@ -6,8 +6,8 @@ Goal is to define what each flag should do in a certain type.
 
 from uuid import uuid4
 from datetime import datetime
-from ..Utility.pydantic_models import createInitiation, Versions
-from ..Utility.logger import loggy
+from Utility.pydantic_models import createInitiation, Versions
+from Utility.logger import loggy
 
 def log(msg: str):
     loggy(local="Engine/operation")
