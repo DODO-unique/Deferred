@@ -8,7 +8,7 @@ from Utility.logger import loggy
 from fastapi import FastAPI, HTTPException
 from uuid import uuid4, UUID
 from Utility.pydantic_models import initPayload
-from enums import call_flags
+from Dock.enums import call_flags
 
 def log(log: str) -> None:
     loggy("dock/endpoints", log)
