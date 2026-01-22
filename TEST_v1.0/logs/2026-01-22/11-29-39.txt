@@ -1,0 +1,49 @@
+2026-01-22T11:29:39.370496 -> Created logs
+dock/endpoints at 2026-01-22T11:29:52.253398 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-22T11:29:52.254076 :
+	requested execution. Executing call
+dock/enums at 2026-01-22T11:29:52.254776 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-22T11:29:52.255484 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-22T11:29:52.256603 :
+	returning instructions (1)
+dock/enums at 2026-01-22T11:29:52.257534 :
+	returning instructions (2)
+dock/enums at 2026-01-22T11:29:52.258124 :
+	returning instructions (3)
+dock/endpoints at 2026-01-22T11:29:52.258706 :
+	Caught instructions. Dispatching them to frontend
+dock/endpoints at 2026-01-22T11:29:54.297586 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-22T11:29:54.298481 :
+	requested execution. Executing call
+dock/enums at 2026-01-22T11:29:54.299448 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-22T11:29:54.300015 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-22T11:29:54.300522 :
+	returning instructions (1)
+dock/enums at 2026-01-22T11:29:54.301021 :
+	returning instructions (2)
+dock/enums at 2026-01-22T11:29:54.301555 :
+	returning instructions (3)
+dock/endpoints at 2026-01-22T11:29:54.302080 :
+	Caught instructions. Dispatching them to frontend
+dock/endpoints at 2026-01-22T11:30:50.810678 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-22T11:30:50.811373 :
+	requested execution. Executing call
+dock/enums at 2026-01-22T11:30:50.812155 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-22T11:30:50.812804 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-22T11:30:50.813473 :
+	returning instructions (1)
+dock/enums at 2026-01-22T11:30:50.814056 :
+	returning instructions (2)
+dock/enums at 2026-01-22T11:30:50.814507 :
+	returning instructions (3)
+dock/endpoints at 2026-01-22T11:30:50.814938 :
+	Caught instructions. Dispatching them to frontend

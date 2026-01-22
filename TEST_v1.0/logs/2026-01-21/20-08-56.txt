@@ -1,0 +1,65 @@
+2026-01-21T20:08:56.092423 -> Created logs
+dock/endpoints at 2026-01-21T20:09:02.388486 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-21T20:09:02.389474 :
+	requested execution. Executing call
+dock/enums at 2026-01-21T20:09:02.390201 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-21T20:09:02.390777 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-21T20:09:02.391360 :
+	returning instructions (1)
+dock/enums at 2026-01-21T20:09:02.391847 :
+	returning instructions (2)
+dock/enums at 2026-01-21T20:09:02.392314 :
+	returning instructions (3)
+dock/endpoints at 2026-01-21T20:09:02.392762 :
+	Caught instructions. Dispatching them to frontend
+dock/endpoints at 2026-01-22T11:21:44.788387 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-22T11:21:44.789790 :
+	requested execution. Executing call
+dock/enums at 2026-01-22T11:21:44.791308 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-22T11:21:44.792121 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-22T11:21:44.792919 :
+	returning instructions (1)
+dock/enums at 2026-01-22T11:21:44.793565 :
+	returning instructions (2)
+dock/enums at 2026-01-22T11:21:44.794255 :
+	returning instructions (3)
+dock/endpoints at 2026-01-22T11:21:44.794876 :
+	Caught instructions. Dispatching them to frontend
+dock/endpoints at 2026-01-22T11:21:48.544646 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-22T11:21:48.545520 :
+	requested execution. Executing call
+dock/enums at 2026-01-22T11:21:48.546137 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-22T11:21:48.546681 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-22T11:21:48.547241 :
+	returning instructions (1)
+dock/enums at 2026-01-22T11:21:48.547762 :
+	returning instructions (2)
+dock/enums at 2026-01-22T11:21:48.548835 :
+	returning instructions (3)
+dock/endpoints at 2026-01-22T11:21:48.549627 :
+	Caught instructions. Dispatching them to frontend
+dock/endpoints at 2026-01-22T11:21:52.754220 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-22T11:21:52.755087 :
+	requested execution. Executing call
+dock/enums at 2026-01-22T11:21:52.755812 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-01-22T11:21:52.756454 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-01-22T11:21:52.757075 :
+	returning instructions (1)
+dock/enums at 2026-01-22T11:21:52.757646 :
+	returning instructions (2)
+dock/enums at 2026-01-22T11:21:52.758208 :
+	returning instructions (3)
+dock/endpoints at 2026-01-22T11:21:52.758921 :
+	Caught instructions. Dispatching them to frontend

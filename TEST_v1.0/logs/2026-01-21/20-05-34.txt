@@ -1,0 +1,7 @@
+2026-01-21T20:05:34.567514 -> Created logs
+dock/endpoints at 2026-01-21T20:07:23.903916 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-01-21T20:07:23.904681 :
+	requested execution. Executing call
+dock/enums at 2026-01-21T20:07:23.916747 :
+	Started a CREATE process, moving control to relevant operation handler

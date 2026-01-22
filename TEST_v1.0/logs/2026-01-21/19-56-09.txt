@@ -1,0 +1,5 @@
+2026-01-21T19:56:09.233237 -> Created logs
+dock/endpoints at 2026-01-21T19:56:35.156488 :
+Received payload with type: init, flag: INIT, version: Tv_1.0
+dock/enums at 2026-01-21T19:56:35.157292 :
+requested execution. Executing call
