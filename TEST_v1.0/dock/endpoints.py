@@ -6,6 +6,7 @@ Serves all the endpoints for the backend
 
 from Utility.logger import loggy
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4, UUID
 from Utility.pydantic_models import initPayload
 from Dock.enums import call_flags
@@ -15,6 +16,12 @@ def log(log: str) -> None:
 
 deferred = FastAPI()
 
+deferred.add_middleware(
+    CORSMiddleware,
+    allow_origins = ["*"],
+    allow_methods = ["*"],
+    allow_headers=["*"]
+)
 # take a single-slot dict, so we don't havae to play with global keyword later
 TASKS: dict[str, UUID] = {}
 
@@ -31,13 +38,13 @@ def add_task(uid: UUID):
 def create_id():
     uid = uuid4()
     add_task(uid)
-    return uid
+    return {"id": uid}
 
 @deferred.post("/tasks/{uid}")
 def docking(uid: UUID, payload: initPayload):
     # let's quickly check if the id is correct.
     if TASKS.get("uid") != uid:
-        raise HTTPException(status_code=400, detail="WRONG UUID")
+        raise HTTPException(status_code=400, detail="Deferred: WRONG UUID sent by the client")
 
     # unwrap validated value objects
     cat = payload.cat.value
