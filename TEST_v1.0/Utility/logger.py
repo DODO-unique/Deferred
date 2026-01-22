@@ -32,7 +32,7 @@ class Logger:
         # open the file
         with open(create_file(self.date, self.time), 'a') as logs:
             logs.write(f'{local} at {datetime.now().isoformat()} :\n')
-            logs.write(f'{log}\n')
+            logs.write(f'\t{log}\n')
 
 # This instance is shared, so all the files can add their logs.
 Hebu = Logger()
