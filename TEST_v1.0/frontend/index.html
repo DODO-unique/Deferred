@@ -19,33 +19,45 @@
           headers: {
             'Content-Type': 'application/json; charset=UTF-8'
           },
-          body: JSON.stringify({"Example": "Payload"})
+          body: JSON.stringify(
+                    {
+          "flag": {
+            "flag": "CREATE"
+          },
+          "cat": {
+            "cat": "init"
+          },
+          "version": {
+            "version": "Tv_1.0"
+          }
+        }
+          )
         })
         console.log("Fetched new response")
         const ew_data = await new_response.json();
         console.log("Parsed data")
         console.log(ew_data)        
-        //check if it works with wrong data. Let's see
-        const re_response = await fetch("http://127.0.0.1:8000/tasks");
-        const re_data = await re_response.json();
-        console.log(re_data.id)
+        // //check if it works with wrong data. Let's see
+        // const re_response = await fetch("http://127.0.0.1:8000/tasks");
+        // const re_data = await re_response.json();
+        // console.log(re_data.id)
 
-        const wrong_response = await fetch(`http://127.0.0.1:8000/tasks/4ef1cc8e-741b-465f-90c4-a01bdf20b82f`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8'
-          },
-          body: JSON.stringify({"detail": "Wrong id"})
-        })
-        if (!wrong_response.ok) {
-          console.error("Error:", await wrong_response.json())
-          return
-        }
+        // const wrong_response = await fetch(`http://127.0.0.1:8000/tasks/4ef1cc8e-741b-465f-90c4-a01bdf20b82f`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json; charset=UTF-8'
+        //   },
+        //   body: JSON.stringify({"detail": "Wrong id"})
+        // })
+        // if (!wrong_response.ok) {
+        //   console.error("Error:", await wrong_response.json())
+        //   return
+        // }
 
-        console.log("Fetched new response")
-        const wrong_data = await wrong_response.json();
-        console.log("Parsed data")
-        console.log(wrong_data)        
+        // console.log("Fetched new response")
+        // const wrong_data = await wrong_response.json();
+        // console.log("Parsed data")
+        // console.log(wrong_data)        
       }
 
 
