@@ -10,7 +10,7 @@ from Utility.pydantic_models import createInitiation, Versions
 from Utility.logger import loggy
 
 def log(msg: str):
-    loggy(local="Engine/operation")
+    loggy(local="Engine/operation", log=msg)
 
 # we will frist take the create flag onlys
 class create:
@@ -29,7 +29,7 @@ class create:
                 log(
                     "reached initiation state. Forwarding control to _initiation."
                 )
-                instructions = self.initiation()
+                instructions = self._initiation()
                 log(
                     "returning instructions (1)"
                 )
