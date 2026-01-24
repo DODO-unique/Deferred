@@ -100,15 +100,15 @@ Dock is intentionally thin and synchronous.
 
 ---
 
-### Enums
+### resolver
 
 **Role:** Intent resolution.
 
-* Enums map high-level intent (e.g. `CREATE`) to executable handlers.
+* resolver map high-level intent (e.g. `CREATE`) to executable handlers.
 * Each enum resolves to a function, not a class.
-* Enums do not own state.
+* resolver do not own state.
 
-Enums act as a controlled switchboard.
+resolver act as a controlled switchboard.
 
 ---
 
@@ -216,7 +216,7 @@ TEST_v1_2/
 |- dock/
 |   |
 |   |- endpoints.py        # protocol boundary (HTTP)
-|   |- enums.py            # intent → handler resolution
+|   |- resolver.py            # intent → handler resolution
 |   |- markdown/           # notes / flow docs (optional)
 |
 |- engine/
