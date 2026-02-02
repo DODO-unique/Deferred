@@ -4,15 +4,16 @@ Docstring for TEST_v1.0.dock.enums
 stores enums, filters and serves functions
 '''
 
-from Engine.operation import create
+from Engine.operation import create, InstructionReturnType
 from Utility.logger import loggy
 from typing import Callable
-from TEST_V1_2.Utility.pydantic_models.protocol_schema import Category
+from Utility.pydantic_models.protocol_schema import Category
+
 
 def log(msg: str):
     loggy(local="dock/enums", log=msg)
 
-instructionsType = Callable[[Category], dict[str, bool]]
+instructionsType = Callable[[Category], InstructionReturnType]
 
 class FlagRegistry:
     def __init__(self):
@@ -24,7 +25,7 @@ class FlagRegistry:
             return func
         return wrapper
     
-    def execute(self, name: str, cat: Category) -> dict[str, bool]:
+    def execute(self, name: str, cat: Category) -> InstructionReturnType:
         if name in self._registry:
             return self._registry[name](cat)
         raise ValueError("No registered flag and function")
@@ -43,7 +44,7 @@ def create_ops(cat: Category):
     )
     return instructions
 
-def call_flags(flag: str, cat: Category) -> dict[str, bool]:
+def call_flags(flag: str, cat: Category) -> InstructionReturnType:
     log(
         "requested execution. Executing call"
     )
