@@ -8,8 +8,8 @@ from Utility.logger import loggy
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4, UUID
-from Utility.pydantic_models import initPayload
-from Dock.enums import call_flags
+from Utility.pydantic_models.protocol_schema import Payload_validator
+from Dock.resolver import call_flags
 
 
 def log(log: str) -> None:
@@ -51,7 +51,7 @@ def create_id():
     return {"id": uid}
 
 @deferred.post("/tasks/{uid}")
-def docking(uid: UUID, payload: initPayload):
+def docking(uid: UUID, payload: Payload_validator):
     # let's quickly check if the id is correct.
     if TASKS.get("uid") != uid:
         raise HTTPException(status_code=400, detail="Deferred: WRONG UUID sent by the client")
@@ -67,11 +67,17 @@ def docking(uid: UUID, payload: initPayload):
         f"version: {version}"
     )
 
-    
+    # if cat is init, we call CREATE flag and create a new operation
+    # We also make sure there is no op_id in the payload for init category
 
     if cat == "init":
-        instructions = call_flags(flag, cat)
+        if payload.content.op_id is not False:
+            raise HTTPException(status_code=400, detail="Deferred: op_id must be False for init category")
+
+        # this triggers a chain of calls that results in instructions being returned.
+        inst_collection = call_flags(flag, payload.cat)
         log(
             "Caught instructions. Dispatching them to frontend"
         )
-        return instructions
+        return inst_collection["instructions"]
+    
