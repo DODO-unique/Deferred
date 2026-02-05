@@ -68,6 +68,10 @@ class Payload_body(BaseModel):
     prompt: Optional[str]
     deliver_at: Optional[ISODateTime]
     op_id: Optional[UUID]
+    # meta
+    version: Optional[VersionsValidator]
+    creation_time: Optional[CanonicalTime]
+    
 
     
 class Payload_content(BaseModel):
@@ -142,10 +146,6 @@ def resolve_instructions(prop: str) -> tuple[str, type[BaseModel]]:
             return "op_id", OpIdValidator
         case "version":
             return "version", VersionsValidator
-        case "payload":
-            return "payload", Payload_content
-        case "time":
-            return "time", CanonicalTime
         case "creation_time":
             return "creation_time", CanonicalTime
         case _:
