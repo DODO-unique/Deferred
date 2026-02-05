@@ -4,7 +4,7 @@ Docstring for TEST_v1.0.Engine.operation
 Goal is to define what each flag should do in a certain type.
 '''
 
-from uuid import uuid4
+from uuid import uuid4, UUID
 from datetime import datetime
 
 
@@ -14,7 +14,7 @@ from Utility.logger import loggy
 def log(msg: str):
     loggy(local="Engine/operation", log=msg)
 
-InstructionReturnType = dict[str, bool]
+InstructionReturnType = dict[str, dict[str, bool] | UUID]
 
 # we will frist take the create flag only
 class create:
@@ -61,6 +61,6 @@ class create:
             "version" : True
         }
 
-
-        return instructions
+        # sending instructions and op_id back.
+        return {"instructions": instructions, "op_id": uid}
     
