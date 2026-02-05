@@ -7,14 +7,14 @@ Goal is to define what each flag should do in a certain type.
 from uuid import uuid4
 from datetime import datetime
 
-from pydantic import BaseModel
-from Utility.pydantic_models.protocol_schema import create_instruction_state, VersionsValidator, Category, createInitiation
+
+from Utility.pydantic_models.protocol_schema import VersionsValidator, Category, createInitiation
 from Utility.logger import loggy
 
 def log(msg: str):
     loggy(local="Engine/operation", log=msg)
 
-InstructionReturnType = dict[str, type[BaseModel] | dict[str, bool]]
+InstructionReturnType = dict[str, bool]
 
 # we will frist take the create flag only
 class create:
@@ -61,10 +61,6 @@ class create:
             "version" : True
         }
 
-        InstructionState = create_instruction_state(instructions)
 
-        return {
-            "instructions" : instructions,
-            "instruction_type" : InstructionState
-        }
+        return instructions
     
