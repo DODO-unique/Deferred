@@ -6,6 +6,7 @@ Goal is to define what each flag should do in a certain type.
 
 from uuid import uuid4, UUID
 from datetime import datetime
+from typing import TypedDict
 
 
 from Utility.pydantic_models.protocol_schema import VersionsValidator, Category, createInitiation
@@ -14,7 +15,9 @@ from Utility.logger import loggy
 def log(msg: str):
     loggy(local="Engine/operation", log=msg)
 
-InstructionReturnType = dict[str, dict[str, bool] | UUID]
+class InstructionReturnType(TypedDict):
+    op_id: UUID
+    instructions: dict[str, bool]
 
 # we will frist take the create flag only
 class create:
