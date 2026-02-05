@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Annotated
 from pydantic import BaseModel, create_model, field_validator, Field, BeforeValidator
 from uuid import UUID
@@ -6,11 +6,19 @@ from uuid import UUID
 
 # ----------------------------------------- payload models ----------------------------------------- #
 
+def epoch_to_datetime(epoch: int) -> datetime:
+    if epoch > 1e11:
+        raise ValueError("epoch must be in seconds")
+    datetime_object = datetime.fromtimestamp(epoch, tz=timezone.utc)
+    return datetime_object
+
 ISODateTime = Annotated[
             datetime,
-            BeforeValidator(datetime.fromisoformat)
+            BeforeValidator(epoch_to_datetime)
             ]
 
+class CanonicalTime(BaseModel):
+    value: ISODateTime
 
 class Category(BaseModel):
     value: str
@@ -32,32 +40,56 @@ class Flag(BaseModel):
         if not v.isupper():
             raise ValueError("Flag must be all capital")
         return v
-    
-class Versions(BaseModel):
+
+# Like, why did I have two of these  
+# class Versions(BaseModel):
+#     value: str
+
+#     @field_validator('value')
+#     @classmethod
+#     def check_version(cls, v: str):
+#         all_versions = {'Tv_1.0'}
+#         if v not in all_versions:
+#             raise ValueError(f"No such version {v}")
+#         return v
+class VersionsValidator(BaseModel):
     value: str
 
     @field_validator('value')
     @classmethod
-    def check_version(cls, v: str):
+    def check_version(cls, v: str) -> str:
         all_versions = {'Tv_1.0'}
         if v not in all_versions:
             raise ValueError(f"No such version {v}")
         return v
     
+
+class Payload_body(BaseModel):
+    prompt: Optional[str]
+    deliver_at: Optional[ISODateTime]
+    op_id: Optional[UUID]
+
+    
 class Payload_content(BaseModel):
-    body: Optional[dict[str, str | dict[any, any]]] = None # type: ignore
+    '''
+    Docstring for Payload_content
+    This should have a pair of cat and flag,
+    the corpus/body, ofcourse, and
+    any other fields that may be added later
+    '''
+    prompt: bool
+    deliver_at: bool
+    op_id: bool
+    body: Payload_body
     # any other fields can be added later
 
-class PackcageTime(BaseModel):
-    value: ISODateTime
-    
 
 class Payload_validator(BaseModel):
     flag: Flag
     cat: Category
     content: Payload_content
-    packed_at: PackcageTime
-    version: Versions
+    packed_at: CanonicalTime
+    version: VersionsValidator
 
 
 # ------------------------------------------ End of payload models ----------------------------------------- #
@@ -84,16 +116,6 @@ class DeliveryValidator(BaseModel):
 class OpIdValidator(BaseModel):
     value: UUID
 
-class VersionsValidator(BaseModel):
-    value: str
-
-    @field_validator('value')
-    @classmethod
-    def check_version(cls, v: str) -> str:
-        all_versions = {'Tv_1.0'}
-        if v not in all_versions:
-            raise ValueError(f"No such version {v}")
-        return v
 
 def create_instruction_state(instructions: dict[str, bool]) -> type[BaseModel]:
     instruction_state_objects: dict[str, tuple[type[BaseModel], Field]] = {} #type: ignore
@@ -120,7 +142,23 @@ def resolve_instructions(prop: str) -> tuple[str, type[BaseModel]]:
             return "op_id", OpIdValidator
         case "version":
             return "version", VersionsValidator
+        case "payload":
+            return "payload", Payload_content
+        case "time":
+            return "time", CanonicalTime
+        case "creation_time":
+            return "creation_time", CanonicalTime
         case _:
             raise ValueError(f"No such instruction property {prop}")
         
 # ----------------------------------------- End of instruction state models ----------------------------------------- #
+
+# ----------------------- This is for the Engine/ -------------------
+
+class createInitiation(BaseModel):
+    op_id : Optional[UUID] = None
+    next_state : str
+    completed_steps : dict[str, str]
+    version : VersionsValidator
+
+# ----------------------- End of Engine/ -------------------
