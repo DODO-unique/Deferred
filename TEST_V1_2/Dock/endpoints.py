@@ -4,11 +4,12 @@ Docstring for TEST_v1.0.dock.endpoints
 Serves all the endpoints for the backend
 '''
 
+from pydantic import BaseModel
 from Utility.logger import loggy
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4, UUID
-from Utility.pydantic_models.protocol_schema import Payload_validator
+from Utility.pydantic_models.protocol_schema import Payload_validator, create_instruction_state
 from Dock.resolver import call_flags
 
 
@@ -32,6 +33,7 @@ deferred.add_middleware(
 
 
 
+
 # take a single-slot dict, so we don't havae to play with global keyword later
 TASKS: dict[str, UUID] = {}
 
@@ -52,6 +54,26 @@ def create_id():
 
 @deferred.post("/tasks/{uid}")
 def docking(uid: UUID, payload: Payload_validator):
+    class InstructionStateModel:
+        def __init__(self):
+            self.op_id: UUID | None = None
+            self.model: type[BaseModel] | None = None
+
+        def create_model(self, op_id: UUID, instructions: dict[str, bool]):
+            self.op_id = op_id
+            self.model = create_instruction_state(instructions)
+
+        def get_instruction_state(self, op_id: UUID):
+            if self.model is None or self.op_id is None:
+                raise HTTPException(400, "Deferred: init must run first")
+
+            if self.op_id != op_id:
+                raise HTTPException(400, "Deferred: op_id mismatch (stale or invalid hydrate)")
+
+            return self.model
+
+
+    Instruction_Model = InstructionStateModel()
     # let's quickly check if the id is correct.
     if TASKS.get("uid") != uid:
         raise HTTPException(status_code=400, detail="Deferred: WRONG UUID sent by the client")
@@ -59,7 +81,7 @@ def docking(uid: UUID, payload: Payload_validator):
     # unwrap validated value objects
     cat = payload.cat.value
     flag = payload.flag.value
-    version = payload.version.value
+    version = payload.version.value 
     # now we play serious. payload is here.
     log(
         f"Received payload with type: {cat}, "
@@ -67,11 +89,12 @@ def docking(uid: UUID, payload: Payload_validator):
         f"version: {version}"
     )
 
+
     # if cat is init, we call CREATE flag and create a new operation
     # We also make sure there is no op_id in the payload for init category
 
     if cat == "init":
-        if payload.content.op_id is not False:
+        if payload.content.op_id:
             raise HTTPException(status_code=400, detail="Deferred: op_id must be False for init category")
 
         # this triggers a chain of calls that results in instructions being returned.
@@ -79,5 +102,31 @@ def docking(uid: UUID, payload: Payload_validator):
         log(
             "Caught instructions. Dispatching them to frontend"
         )
-        return inst_collection["instructions"]
+        Instruction_Model.create_model(
+            op_id=inst_collection.get("op_id"), 
+            instructions=inst_collection.get("instructions")
+        )
+        return inst_collection
     
+    if cat == "hydrate":
+        if not payload.content.op_id:
+            raise HTTPException(status_code=400, detail="Deferred: op_id must be provided for hydrate category")
+        
+        if payload.content.prompt and payload.content.deliver_at and payload.content.op_id:
+            
+            # this triggers a chain of calls that results in instructions being returned.
+
+            # now, we validate the payload content
+            op_id = payload.content.body.op_id
+            if op_id is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Deferred: op_id must be provided for hydrate category"
+                )
+
+            try:
+                InstructionModel = Instruction_Model.get_instruction_state(op_id=op_id)
+                InstructionModel(**payload.content.model_dump())
+                
+            except Exception as e:
+                raise HTTPException(status_code=400, detail=f"Deferred: Invalid payload content - {e}")
