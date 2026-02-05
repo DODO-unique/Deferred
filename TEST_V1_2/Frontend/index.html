@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #0f0f0f;
+        color: #eaeaea;
+        padding: 2rem;
+      }
+
+      button {
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      pre {
+        margin-top: 1rem;
+        background: #1a1a1a;
+        padding: 1rem;
+        border-radius: 6px;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="btn">Create task</button>
+
+    <pre id="output">Idle.</pre>
+
+    <script>
+      const btn = document.getElementById("btn");
+      const output = document.getElementById("output");
+
+      function log(msg, obj = null) {
+        const line =
+          typeof msg === "string"
+            ? msg
+            : JSON.stringify(msg, null, 2);
+
+        output.textContent += "\n" + line;
+
+        if (obj) {
+          output.textContent +=
+            "\n" + JSON.stringify(obj, null, 2);
+        }
+
+        output.scrollTop = output.scrollHeight;
+      }
+
+      async function tester() {
+        output.textContent = "";
+        log("→ Sending GET /tasks");
+
+        const response = await fetch("http://127.0.0.1:8000/tasks");
+        const data = await response.json();
+
+        log("✓ Parsed response");
+        log("Received ID:", data);
+
+        log(`→ Sending POST /tasks/${data.id}`);
+
+        const new_response = await fetch(
+          `http://127.0.0.1:8000/tasks/${data.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+            },
+            body: JSON.stringify({
+            flag: { value: "CREATE" },
+            cat: { value: "init" },
+            version: { value: "Tv_1.0" },
+            packed_at: {
+              value: Math.floor(Date.now() / 1000)
+            },
+            content: {
+              prompt: false,
+              deliver_at: false,
+              op_id: false,
+              body: {
+                prompt: null,
+                deliver_at: null,
+                op_id: null
+              }
+              }
+            }),
+          }
+        );
+
+        const ew_data = await new_response.json();
+
+        log("✓ Parsed POST response");
+        log("Backend returned:", ew_data);
+      }
+
+      btn.addEventListener("click", tester);
+    </script>
+  </body>
+</html>
