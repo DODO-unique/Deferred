@@ -52,26 +52,25 @@ def create_id():
     add_task(uid)
     return {"id": uid}
 
+class InstructionStateModel:
+    def __init__(self):
+        self.op_id: UUID | None = None
+        self.model: type[BaseModel] | None = None
+
+    def create_model(self, op_id: UUID, instructions: dict[str, bool]):
+        self.op_id = op_id
+        self.model = create_instruction_state(instructions)
+
+    def get_instruction_state(self, op_id: UUID):
+        if self.model is None or self.op_id is None:
+            raise HTTPException(400, "Deferred: init must run first")
+
+        if self.op_id != op_id:
+            raise HTTPException(400, "Deferred: op_id mismatch (stale or invalid hydrate)")
+
+        return self.model
 @deferred.post("/tasks/{uid}")
 def docking(uid: UUID, payload: Payload_validator):
-    class InstructionStateModel:
-        def __init__(self):
-            self.op_id: UUID | None = None
-            self.model: type[BaseModel] | None = None
-
-        def create_model(self, op_id: UUID, instructions: dict[str, bool]):
-            self.op_id = op_id
-            self.model = create_instruction_state(instructions)
-
-        def get_instruction_state(self, op_id: UUID):
-            if self.model is None or self.op_id is None:
-                raise HTTPException(400, "Deferred: init must run first")
-
-            if self.op_id != op_id:
-                raise HTTPException(400, "Deferred: op_id mismatch (stale or invalid hydrate)")
-
-            return self.model
-
 
     Instruction_Model = InstructionStateModel()
     # let's quickly check if the id is correct.
@@ -98,15 +97,15 @@ def docking(uid: UUID, payload: Payload_validator):
             raise HTTPException(status_code=400, detail="Deferred: op_id must be False for init category")
 
         # this triggers a chain of calls that results in instructions being returned.
-        inst_collection = call_flags(flag, payload.cat)
+        instruction_collection = call_flags(flag=flag, cat=payload.cat, payload=None)
         log(
             "Caught instructions. Dispatching them to frontend"
         )
         Instruction_Model.create_model(
-            op_id=inst_collection.get("op_id"), 
-            instructions=inst_collection.get("instructions")
+            op_id=instruction_collection.get("instruction_op_id"), 
+            instructions=instruction_collection.get("instructions")
         )
-        return inst_collection
+        return instruction_collection
     
     if cat == "hydrate":
         if not payload.content.op_id:
@@ -117,6 +116,7 @@ def docking(uid: UUID, payload: Payload_validator):
             # this triggers a chain of calls that results in instructions being returned.
 
             # now, we validate the payload content
+            payload_body = payload.content.body
             op_id = payload.content.body.op_id
             if op_id is None:
                 raise HTTPException(
@@ -126,7 +126,17 @@ def docking(uid: UUID, payload: Payload_validator):
 
             try:
                 InstructionModel = Instruction_Model.get_instruction_state(op_id=op_id)
-                InstructionModel(**payload.content.model_dump())
+                InstructionModel(**payload_body.model_dump())
                 
             except Exception as e:
                 raise HTTPException(status_code=400, detail=f"Deferred: Invalid payload content - {e}")
+            log(
+                "Payload content validated successfully. Passing the control to relevant flag handler"
+            )
+            hydration = call_flags(flag=flag, cat=payload.cat, payload=payload_body)
+            log(
+                "Caught hydration result. Dispatching them to frontend"
+            )
+            return hydration
+        else:
+            raise HTTPException(status_code=400, detail="Deferred: Incomplete payload content for hydrate category")

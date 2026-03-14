@@ -9,14 +9,14 @@ from datetime import datetime
 from typing import TypedDict
 
 
-from Utility.pydantic_models.protocol_schema import VersionsValidator, Category, createInitiation
+from Utility.pydantic_models.protocol_schema import Payload_body, VersionsValidator, Category, createInitiation
 from Utility.logger import loggy
 
 def log(msg: str):
     loggy(local="Engine/operation", log=msg)
 
 class InstructionReturnType(TypedDict):
-    op_id: UUID
+    instruction_op_id: UUID
     instructions: dict[str, bool]
 
 # we will frist take the create flag only
@@ -30,7 +30,7 @@ class create:
             version = VersionsValidator(value="Tv_1.0")
         )
     
-    def executing_filter(self, cat: Category) -> InstructionReturnType:
+    def executing_filter(self, cat: Category, payload: Payload_body | None) -> InstructionReturnType:
         if cat.value == 'init':
             if self.state.next_state == 'Not Set':
                 log(
@@ -42,6 +42,21 @@ class create:
                 )
                 return instructions
         
+        if cat.value == 'hydrate':
+            if payload is None:
+                raise ValueError("Deferred: Payload must be provided for hydrate category")
+            
+            payload_body = Payload_body(**payload.model_dump())
+            verified_payload = dict(payload_body)
+            log(
+                "reached hydration state. Payload content validated. Forwarding control to relevant flag handler"
+            )
+            log(
+                f"Payload content: {verified_payload}"
+            )
+            # operation here involves touching ORM, so that happens first. For now, we send back a success 
+            return {"response": "SUCCESSFULLY HYDRATED"}
+
         raise ValueError("Deferred: Can not execute filter for category")
 
 
@@ -65,5 +80,4 @@ class create:
         }
 
         # sending instructions and op_id back.
-        return {"instructions": instructions, "op_id": uid}
-    
+        return {"instructions": instructions, "instruction_op_id": uid}

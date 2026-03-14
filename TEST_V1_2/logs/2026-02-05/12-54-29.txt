@@ -1,0 +1,17 @@
+2026-02-05T12:54:29.008967 -> Created logs
+dock/endpoints at 2026-02-05T12:54:33.420512 :
+	Received payload with type: init, flag: CREATE, version: Tv_1.0
+dock/enums at 2026-02-05T12:54:33.421475 :
+	requested execution. Executing call
+dock/enums at 2026-02-05T12:54:33.422389 :
+	Started a CREATE process, moving control to relevant operation handler
+Engine/operation at 2026-02-05T12:54:33.423056 :
+	reached initiation state. Forwarding control to _initiation.
+Engine/operation at 2026-02-05T12:54:33.424867 :
+	returning instructions (1)
+dock/enums at 2026-02-05T12:54:33.425726 :
+	returning instructions (2)
+dock/enums at 2026-02-05T12:54:33.427666 :
+	returning instructions (3)
+dock/endpoints at 2026-02-05T12:54:33.428812 :
+	Caught instructions. Dispatching them to frontend

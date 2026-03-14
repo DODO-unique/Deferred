@@ -1,0 +1,2 @@
+* in operation.py, the return type of def executing_filter is only returning instruction type which is native to init only, for other cats it is not usable. To tackle this issue, try to incorporate executing_filter in a different module, managing return types, seperate concerns.
+* 

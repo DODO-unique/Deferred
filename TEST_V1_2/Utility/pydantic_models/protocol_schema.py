@@ -68,7 +68,7 @@ class Payload_body(BaseModel):
     prompt: Optional[str]
     deliver_at: Optional[ISODateTime]
     op_id: Optional[UUID]
-    # meta
+    # META fields:
     version: Optional[VersionsValidator]
     creation_time: Optional[CanonicalTime]
     
