@@ -1,0 +1,33 @@
+2026-03-12T18:09:45.192336 -> Created logs
+Dock/Endpoints at 2026-03-12T18:09:52.830335 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 39, 52, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:09:52.832009 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:09:52.833895 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:09:52.835901 :
+	Passing control to op man for operation creation
+Dock/Endpoints at 2026-03-12T18:09:57.419316 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 39, 57, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:09:57.430830 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:09:57.432125 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:09:57.433133 :
+	Passing control to op man for operation creation
+Dock/Endpoints at 2026-03-12T18:12:03.452144 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 42, 3, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:12:03.453035 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:12:03.453721 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:12:03.454541 :
+	Passing control to op man for operation creation
+Dock/Endpoints at 2026-03-12T18:12:09.372434 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 42, 9, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:12:09.373311 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:12:09.374197 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:12:09.375403 :
+	Passing control to op man for operation creation

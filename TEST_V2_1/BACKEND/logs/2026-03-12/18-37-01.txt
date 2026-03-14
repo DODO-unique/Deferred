@@ -1,0 +1,31 @@
+2026-03-12T18:37:01.657108 -> Created logs
+Dock/Endpoints at 2026-03-12T18:38:42.753836 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 13, 8, 42, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:38:42.755292 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:38:42.756414 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:38:42.757352 :
+	Passing control to op man for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:38:42.758478 :
+	received init package for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:38:42.759736 :
+	No existing operation with the generated op_id. Creating operation state.
+Medium/Operation_Manager/op_man at 2026-03-12T18:38:42.761910 :
+	Operation state created and stored successfully. Returning operation ID.
+Dispatcher/OP_DIS at 2026-03-12T18:38:42.763238 :
+	Received respose from op-man, returning to endpoint
+Dock/Endpoints at 2026-03-12T18:38:42.764786 :
+	Received operation_id {'op_id': UUID('66c22462-259a-46e8-8f5f-dd8060bd0776')} from OPDIS, returning to frontend
+Dock/Endpoints at 2026-03-12T18:38:43.808138 :
+	Received a request with flag: value='CREATE', cat: value='hydrate', package time: value=datetime.datetime(2026, 3, 12, 13, 8, 43, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:38:43.809291 :
+	Content has op_id: 66c22462-259a-46e8-8f5f-dd8060bd0776, deliver_at: 2026-03-14 13:08:43+00:00, prompt: This will be delivered; a CREATE flag.
+Dock/Endpoints at 2026-03-12T18:38:43.810582 :
+	Sending payload to PATH TWO
+Dispatcher/OP_DIS at 2026-03-12T18:38:43.811916 :
+	Verified operation for op_id: 66c22462-259a-46e8-8f5f-dd8060bd0776. Forwarding to TADIS
+Dispatcher/TA_DIS at 2026-03-12T18:38:43.813110 :
+	Received CREATE flag in TA_DIS. Passing control to Engine to create function.
+Touch/ORM at 2026-03-12T18:38:43.827505 :
+	Creating a new entry in the database with email: victorprescott@gmail.com, prompt: This will be delivered, and delivery time: 2026-03-14 13:08:43+00:00

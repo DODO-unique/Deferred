@@ -1,0 +1,37 @@
+2026-03-12T18:21:58.121103 -> Created logs
+Dock/Endpoints at 2026-03-12T18:24:00.277599 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 54, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:24:00.278480 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:24:00.279203 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:24:00.279951 :
+	Passing control to op man for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:24:00.280893 :
+	received init package for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:24:00.281634 :
+	No existing operation with the generated op_id. Creating operation state.
+Dock/Endpoints at 2026-03-12T18:24:19.647158 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 54, 19, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:24:19.648135 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:24:19.648912 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:24:19.649649 :
+	Passing control to op man for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:24:19.650323 :
+	received init package for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:24:19.651256 :
+	No existing operation with the generated op_id. Creating operation state.
+Dock/Endpoints at 2026-03-12T18:24:28.645200 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 54, 28, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:24:28.646130 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:24:28.646886 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:24:28.647599 :
+	Passing control to op man for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:24:28.648268 :
+	received init package for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:24:28.648924 :
+	No existing operation with the generated op_id. Creating operation state.

@@ -1,0 +1,11 @@
+2026-03-12T17:44:20.340064 -> Created logs
+Utility/ErrorHandler at 2026-03-12T17:44:44.217582 :
+	Error occurred: Incorrect temporal type: epoch must be an integer, with error code: 9001, exception type: ValueError, and exception message: <slot wrapper '__str__' of 'object' objects>
+Dock/Endpoints at 2026-03-12T17:54:17.724677 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2009, 2, 13, 23, 31, 30, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T17:54:17.725297 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T17:54:17.725852 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Utility/ErrorHandler at 2026-03-12T17:54:22.254194 :
+	Error occurred: Incorrect temporal type: epoch must be an integer, with error code: 9001, exception type: ValueError, and exception message: <slot wrapper '__str__' of 'object' objects>

@@ -1,0 +1,13 @@
+2026-03-12T17:55:31.705749 -> Created logs
+Dock/Endpoints at 2026-03-12T17:57:57.750217 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 27, 57, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T17:57:57.750840 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T17:57:57.751311 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dock/Endpoints at 2026-03-12T17:58:05.231350 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 28, 5, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T17:58:05.243270 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T17:58:05.244138 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'

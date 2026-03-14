@@ -1,0 +1,45 @@
+2026-03-12T18:28:59.012679 -> Created logs
+Dock/Endpoints at 2026-03-12T18:29:12.756849 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 12, 59, 12, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:29:12.757643 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:29:12.758393 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:29:12.759151 :
+	Passing control to op man for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:29:12.759874 :
+	received init package for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:29:12.771038 :
+	No existing operation with the generated op_id. Creating operation state.
+Medium/Operation_Manager/op_man at 2026-03-12T18:29:12.772314 :
+	Operation state created and stored successfully. Returning operation ID.
+Dispatcher/OP_DIS at 2026-03-12T18:29:12.773202 :
+	Received respose from op-man, returning to endpoint
+Dock/Endpoints at 2026-03-12T18:29:12.773957 :
+	Received operation_id {'op_id': UUID('2f2080c3-131d-4858-8544-cf51d0eb3f83')} from OPDIS, returning to frontend
+Dock/Endpoints at 2026-03-12T18:30:44.156612 :
+	Received a request with flag: value='CREATE', cat: value='init', package time: value=datetime.datetime(2026, 3, 12, 13, 0, 44, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:30:44.157696 :
+	Category init detected. Passing control payload to OPDIS
+Dispatcher/OP_DIS at 2026-03-12T18:30:44.158607 :
+	Creating PATH ONE package with flag: value='CREATE', cat: value='init'
+Dispatcher/OP_DIS at 2026-03-12T18:30:44.159577 :
+	Passing control to op man for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:30:44.160398 :
+	received init package for operation creation
+Medium/Operation_Manager/op_man at 2026-03-12T18:30:44.161362 :
+	No existing operation with the generated op_id. Creating operation state.
+Medium/Operation_Manager/op_man at 2026-03-12T18:30:44.162013 :
+	Operation state created and stored successfully. Returning operation ID.
+Dispatcher/OP_DIS at 2026-03-12T18:30:44.162614 :
+	Received respose from op-man, returning to endpoint
+Dock/Endpoints at 2026-03-12T18:30:44.163244 :
+	Received operation_id {'op_id': UUID('ae84e624-addd-4003-bc7c-c5b5ff9f560f')} from OPDIS, returning to frontend
+Dock/Endpoints at 2026-03-12T18:30:50.086965 :
+	Received a request with flag: value='CREATE', cat: value='hydrate', package time: value=datetime.datetime(2026, 3, 12, 13, 0, 50, tzinfo=datetime.timezone.utc), version: value='Tv_2.1'
+Dock/Endpoints at 2026-03-12T18:30:50.088272 :
+	Content has op_id: ae84e624-addd-4003-bc7c-c5b5ff9f560f, deliver_at: 2026-03-14 13:00:50+00:00, prompt: This will be delivered; a CREATE flag.
+Dock/Endpoints at 2026-03-12T18:30:50.089207 :
+	Sending payload to PATH TWO
+Dispatcher/OP_DIS at 2026-03-12T18:30:50.090062 :
+	Verified operation for op_id: ae84e624-addd-4003-bc7c-c5b5ff9f560f. Forwarding to TADIS
