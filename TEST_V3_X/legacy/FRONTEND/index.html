@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test version 2.1</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0d0d0f;
+            --surface: #141416;
+            --surface2: #1a1a1e;
+            --border: #2a2a30;
+            --text: #e2e2e8;
+            --muted: #5a5a6e;
+            --init-color: #4af0a0;
+            --create-color: #4ab0ff;
+            --cycle-color: #f06090;
+            --log-bg: #0a0a0c;
+            --err-color: #ff6060;
+            --warn-color: #f0c040;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 40px;
+        }
+
+        header {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .version-tag {
+            font-size: 0.7rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            border: 1px solid var(--border);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+
+        .url-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .url-label {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+
+        .url-input {
+            flex: 1;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            padding: 8px 12px;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .url-input:focus { border-color: var(--muted); }
+
+        .state-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px 16px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 0.68rem;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            flex-wrap: wrap;
+        }
+
+        .state-label { text-transform: uppercase; }
+        .state-sep   { color: var(--border); }
+        .state-uid   { color: var(--init-color);   font-size: 0.66rem; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .state-opid  { color: var(--create-color); font-size: 0.66rem; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .state-ver   { color: var(--text); font-size: 0.7rem; font-weight: 700; }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border: 1px solid;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.15s, box-shadow 0.15s, transform 0.1s, opacity 0.2s;
+            outline: none;
+        }
+
+        .btn:disabled { opacity: 0.28; cursor: not-allowed; }
+        .btn:not(:disabled):active { transform: scale(0.97); }
+
+        .btn-init   { color: var(--init-color);   border-color: var(--init-color); }
+        .btn-init:not(:disabled):hover   { background: rgba(74,240,160,0.08); box-shadow: 0 0 16px rgba(74,240,160,0.2); }
+
+        .btn-create { color: var(--create-color);  border-color: var(--create-color); }
+        .btn-create:not(:disabled):hover { background: rgba(74,176,255,0.08); box-shadow: 0 0 16px rgba(74,176,255,0.2); }
+
+        .btn-cycle  { color: var(--cycle-color);   border-color: var(--cycle-color); }
+        .btn-cycle:not(:disabled):hover  { background: rgba(240,96,144,0.08); box-shadow: 0 0 16px rgba(240,96,144,0.2); }
+
+        .btn-clear  { color: var(--muted); border-color: var(--border); margin-left: auto; }
+        .btn-clear:hover { color: var(--text); border-color: var(--muted); }
+
+        .log-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .log-header {
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-header-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--muted);
+            transition: background 0.3s;
+        }
+        .log-header-dot.active { background: var(--init-color); animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .log-header-label { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
+        .log-count { margin-left: auto; font-size: 0.65rem; color: var(--muted); }
+
+        #log-output {
+            flex: 1;
+            background: var(--log-bg);
+            overflow-y: auto;
+            padding: 16px;
+            min-height: 400px;
+            max-height: calc(100vh - 340px);
+        }
+
+        #log-output::-webkit-scrollbar { width: 6px; }
+        #log-output::-webkit-scrollbar-track { background: transparent; }
+        #log-output::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        .log-entry {
+            display: grid;
+            grid-template-columns: auto auto 1fr;
+            gap: 12px;
+            align-items: baseline;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            font-size: 0.75rem;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.2s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .log-ts  { color: var(--muted); white-space: nowrap; font-size: 0.68rem; }
+        .log-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
+
+        .tag-init   { color: var(--init-color);   background: rgba(74,240,160,0.1); }
+        .tag-create { color: var(--create-color);  background: rgba(74,176,255,0.1); }
+        .tag-cycle  { color: var(--cycle-color);   background: rgba(240,96,144,0.1); }
+        .tag-system { color: var(--muted);          background: rgba(255,255,255,0.04); }
+        .tag-ok     { color: var(--init-color);    background: rgba(74,240,160,0.1); }
+        .tag-err    { color: var(--err-color);      background: rgba(255,96,96,0.1); }
+        .tag-warn   { color: var(--warn-color);     background: rgba(240,192,64,0.1); }
+
+        .log-msg     { color: var(--text); word-break: break-all; }
+        .log-msg .dim { color: var(--muted); }
+
+        .log-empty {
+            color: var(--muted);
+            font-size: 0.72rem;
+            padding: 40px 0;
+            text-align: center;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>TEST VERSION 2.1</h1>
+    <span class="version-tag">v2.1.0</span>
+</header>
+
+<div class="url-row">
+    <span class="url-label">Base URL</span>
+    <input class="url-input" id="base-url" type="text" value="http://localhost:8000" />
+</div>
+
+<div class="state-bar">
+    <span class="state-label">uid</span>
+    <span class="state-uid" id="disp-uid">—</span>
+    <span class="state-sep">│</span>
+    <span class="state-label">op_id</span>
+    <span class="state-opid" id="disp-opid">—</span>
+    <span class="state-sep">│</span>
+    <span class="state-label">version</span>
+    <span class="state-ver" id="disp-ver">Tv_2.1</span>
+</div>
+
+<div class="controls">
+    <button class="btn btn-init"   id="btn-init"   onclick="runInit()">initiate init</button>
+    <button class="btn btn-create" id="btn-create" onclick="runCreate()" disabled>initiate CREATE</button>
+    <button class="btn btn-cycle"  id="btn-cycle"  onclick="runCycle()"  disabled>complete cycle</button>
+    <button class="btn btn-clear"  onclick="clearLogs()">clear</button>
+</div>
+
+<div class="log-wrapper">
+    <div class="log-header">
+        <div class="log-header-dot" id="status-dot"></div>
+        <span class="log-header-label">System Log</span>
+        <span class="log-count" id="log-count">0 entries</span>
+    </div>
+    <div id="log-output">
+        <div class="log-empty" id="empty-msg">— awaiting input —</div>
+    </div>
+</div>
+
+<script>
+    // ── State ────────────────────────────────────────────────────
+    const state = { uid: null, op_id: null, version: "Tv_2.1" };
+
+    // ── Helpers ──────────────────────────────────────────────────
+    const $   = id => document.getElementById(id);
+    const url = () => $('base-url').value.replace(/\/$/, '');
+    const dim = s  => `<span class="dim">${s}</span>`;
+
+    function ts() {
+        const n = new Date();
+        return n.toTimeString().split(' ')[0] + '.' + String(n.getMilliseconds()).padStart(3, '0');
+    }
+
+    let count = 0;
+    function log(tag, cls, msg) {
+        const out = $('log-output');
+        $('empty-msg')?.remove();
+
+        const dot = $('status-dot');
+        dot.classList.add('active');
+        setTimeout(() => dot.classList.remove('active'), 800);
+
+        const el = document.createElement('div');
+        el.className = 'log-entry';
+        el.innerHTML = `<span class="log-ts">${ts()}</span><span class="log-tag ${cls}">${tag}</span><span class="log-msg">${msg}</span>`;
+        out.appendChild(el);
+        out.scrollTop = out.scrollHeight;
+
+        count++;
+        $('log-count').textContent = `${count} entr${count === 1 ? 'y' : 'ies'}`;
+    }
+
+    function refreshState() {
+        $('disp-uid').textContent  = state.uid   ?? '—';
+        $('disp-opid').textContent = state.op_id ?? '—';
+    }
+
+    function setButtons(step) {
+        $('btn-init').disabled   = false;
+        $('btn-create').disabled = step === 'idle';
+        $('btn-cycle').disabled  = step !== 'has-opid';
+    }
+
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // ── INIT ─────────────────────────────────────────────────────
+    // Step 1 — GET /tasks  → uid
+    // Step 2 — POST /tasks/{uid}  cat=init
+    async function runInit() {
+        $('btn-init').disabled = true;
+
+        // --- Step 1: get uid ---
+        log('INIT', 'tag-init', `GET ${dim(url() + '/tasks')}`);
+
+        let uid;
+        try {
+            const res  = await fetch(`${url()}/tasks`);
+            const data = await res.json();
+            uid = data.id;
+            if (!uid) throw new Error('No id in response: ' + JSON.stringify(data));
+            state.uid = uid;
+            refreshState();
+            log('OK', 'tag-ok', `uid ${dim('←')} ${uid}`);
+        } catch(e) {
+            log('ERR', 'tag-err', `GET /tasks failed — ${e.message}`);
+            $('btn-init').disabled = false;
+            return;
+        }
+
+        await delay(80);
+
+        // --- Step 2: init post ---
+        const now = Math.floor(Date.now() / 1000);
+        const initPayload = {
+            flag:      { value: "CREATE" },
+            cat:       { value: "init" },
+            uid:       uid,
+            content: {
+                prompt:        null,
+                deliver_at:    null,
+                op_id:         null,
+                creation_time: now
+            },
+            packed_at: { value: now },
+            version:   { value: state.version }
+        };
+
+        log('INIT', 'tag-init', `POST ${dim(url() + '/tasks/' + uid)}`);
+        log('INIT', 'tag-init', `flag=INIT  cat=init  ver=${state.version}  packed_at=${now.toFixed(3)}`);
+
+        try {
+            const res  = await fetch(`${url()}/tasks/${uid}`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(initPayload)
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                log('ERR', 'tag-err', `${res.status} ${dim('←')} ${JSON.stringify(data)}`);
+                $('btn-init').disabled = false;
+                return;
+            }
+
+            // Try to pull op_id from response
+            const op_id = data?.op_id ?? data?.content?.op_id ?? null;
+            if (op_id) {
+                state.op_id = op_id;
+                refreshState();
+                log('OK', 'tag-ok', `op_id ${dim('←')} ${op_id}`);
+                setButtons('has-opid');
+            } else {
+                log('ERR', 'tag-err', `init accepted ${dim('←')} ${JSON.stringify(data)}`);
+                setButtons('has-uid');
+            }
+
+        } catch(e) {
+            log('ERR', 'tag-err', `POST failed — ${e.message}`);
+        }
+
+        $('btn-init').disabled = false;
+        log('SYSTEM', 'tag-system', '────────────────────────────────────');
+    }
+
+    // ── CREATE ───────────────────────────────────────────────────
+    // POST /tasks/{uid}  cat=create, flag=CREATE
+    // prompt = "This will be delivered"
+    // deliver_at = now + 172800  (+2 days)
+    async function runCreate() {
+        if (!state.uid) { log('WARN', 'tag-warn', 'No uid — run INIT first'); return; }
+        $('btn-create').disabled = true;
+
+        const now = Math.floor(Date.now() / 1000);
+        const deliverAt = now + 172800; // +2 days
+
+        const createPayload = {
+            flag:      { value: "CREATE" },
+            cat:       { value: "hydrate" },
+            uid:       state.uid,
+            content: {
+                prompt:        "This will be delivered",
+                deliver_at:    deliverAt,
+                op_id:         state.op_id,
+                creation_time: now
+            },
+            packed_at: { value: now },
+            version:   { value: state.version }
+        };
+
+        log('CREATE', 'tag-create', `POST ${dim(url() + '/tasks/' + state.uid)}`);
+        log('CREATE', 'tag-create', `flag=CREATE  cat=create  ver=${state.version}`);
+        log('CREATE', 'tag-create', `prompt ${dim('→')} "This will be delivered"`);
+        log('CREATE', 'tag-create', `deliver_at ${dim('→')} ${deliverAt.toFixed(3)} ${dim('(now + 172800s / +2 days)')}`);
+        log('CREATE', 'tag-create', `op_id ${dim('→')} ${state.op_id ?? 'null'}`);
+
+        try {
+            const res  = await fetch(`${url()}/tasks/${state.uid}`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(createPayload)
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                log('ERR', 'tag-err', `${res.status} ${dim('←')} ${JSON.stringify(data)}`);
+                $('btn-create').disabled = false;
+                return;
+            }
+
+            log('SUCCESS', 'tag-ok', `CREATE accepted ${dim('←')} ${JSON.stringify(data)}`);
+            setButtons('has-opid');
+
+        } catch(e) {
+            log('ERR', 'tag-err', `POST failed — ${e.message}`);
+            $('btn-create').disabled = false;
+        }
+
+        log('SYSTEM', 'tag-system', '────────────────────────────────────');
+    }
+
+    // ── CYCLE ────────────────────────────────────────────────────
+    // Resets local state — full cycle complete
+    async function runCycle() {
+        log('CYCLE', 'tag-cycle', `Completing cycle ${dim('→')} uid=${state.uid}`);
+        await delay(80);
+        log('CYCLE', 'tag-cycle', `Flushing local state ${dim('→')} uid & op_id cleared`);
+
+        state.uid   = null;
+        state.op_id = null;
+        refreshState();
+        setButtons('idle');
+
+        log('CYCLE', 'tag-cycle', '✓ Cycle complete — ready for new run');
+        log('SYSTEM', 'tag-system', '────────────────────────────────────');
+    }
+
+    // ── CLEAR ────────────────────────────────────────────────────
+    function clearLogs() {
+        $('log-output').innerHTML = '<div class="log-empty" id="empty-msg">— awaiting input —</div>';
+        count = 0;
+        $('log-count').textContent = '0 entries';
+    }
+
+    // boot
+    refreshState();
+    setButtons('idle');
+</script>
+
+</body>
+</html>

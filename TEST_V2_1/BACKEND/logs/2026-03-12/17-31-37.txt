@@ -1,3 +1,0 @@
-2026-03-12T17:31:37.378865 -> Created logs
-Utility/ErrorHandler at 2026-03-12T17:31:43.573404 :
-	Error occurred: Incorrect temporal type: epoch must be an integer, with error code: 9001, exception type: ValueError, and exception message: <slot wrapper '__str__' of 'object' objects>

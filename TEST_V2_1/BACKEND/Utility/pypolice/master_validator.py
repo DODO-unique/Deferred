@@ -67,7 +67,7 @@ class VersionsValidator(BaseModel):
     @field_validator('value')
     @classmethod
     def check_version(cls, v: str) -> str:
-        all_versions = {'Tv_1.0', 'Tv_1.1', 'Tv_2.1'}
+        all_versions = {'Tv_1.0', 'Tv_1.1', 'Tv_2.1', }
         if v not in all_versions:
             raise ValueError(f"No such version {v}")
         return v
