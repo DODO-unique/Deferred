@@ -1,0 +1,1 @@
+1. Quick rule of thumb: Every Pydantic field_validator must return the (possibly modified) value, otherwise the field silently becomes None.
