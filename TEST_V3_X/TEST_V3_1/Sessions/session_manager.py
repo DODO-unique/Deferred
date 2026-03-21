@@ -31,9 +31,6 @@ async def create_session(uname: UserName):
     select_object = await fetch_line(uname= uname)
 
     token = uuid4()
-    if select_object is None:
-        initiate_error_handler(message="user not found", errCode=ErrorCodes.USER_NOT_FOUND.value, error=ValueError("user not found"))   
-        return #redundant
 
     # create a new session!
     result = await new_session(session_token=token, user = select_object) 
