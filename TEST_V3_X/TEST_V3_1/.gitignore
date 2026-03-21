@@ -1,6 +1,6 @@
 logs/
 .env
 .ipynb_checkpoints/
-V3_1_1/
 __pycache__/
 deferred/
+test_jupyter_files/
