@@ -2,6 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY,
+    uname TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -23,7 +24,7 @@ BEGIN
 END$$;
 
 CREATE TABLE IF NOT EXISTS scheduled_messages (
-    id UUID PRIMARY KEY DEFAULT uuidv4(),
+    id UUID PRIMARY KEY,
     user_id UUID REFERENCES users(id),
     email TEXT NOT NULL,
     prompt TEXT NOT NULL,
