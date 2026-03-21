@@ -63,6 +63,7 @@ class ErrorCodes(Enum):
     INVALID_USERNAME_FORMAT = 4002
     INVALID_PASSWORD_FORMAT = 4003
     INCORRECT_PASSWORD = 4004
+    CANNOT_CREATE_SESSION = 4005
 
     # ------------------ 9000s for validators ---------------- #
     INCORRECT_TEMPORAL_TYPE = 9001
@@ -86,4 +87,5 @@ http_deferred_error: dict[int, int] = {
     ErrorCodes.USER_NOT_FOUND.value: 404,
     ErrorCodes.BROAD_DATABASE_ERROR.value: 500,
     ErrorCodes.INCORRECT_PASSWORD.value: 401,
+    ErrorCodes.CANNOT_CREATE_SESSION.value: 500
 }
