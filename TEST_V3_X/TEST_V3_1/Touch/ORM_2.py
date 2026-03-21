@@ -4,9 +4,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from Utility.ErrorHandler import initiate_error_handler, ErrorCodes
 from uuid import UUID
+from sqlalchemy.exc import NoResultFound  # Import for specific exception handling
 
 URL = "postgresql+asyncpg://victor:yomama@localhost:5506/deferred"
 engine = create_async_engine(URL)
+
 
 async def fetch_line(uname: UserName) -> Users: #type: ignore
     '''
@@ -16,10 +18,11 @@ async def fetch_line(uname: UserName) -> Users: #type: ignore
         async with AsyncSession(engine) as session:
             stmt = select(Users).where(Users.uname == uname.value)
             line_object = await session.execute(stmt)
-            result = line_object.scalar_one_or_none()
-            if result is None:
-                initiate_error_handler(message="user not found", errCode=ErrorCodes.USER_NOT_FOUND.value, error=ValueError("user not found"))   
-            return result #type: ignore
+            result = line_object.scalar_one()
+            return result
+    except NoResultFound as e:
+        # Handle case where no user is found (even for verified uname, in case of data inconsistency)
+        initiate_error_handler(message="User not found", errCode=ErrorCodes.USER_NOT_FOUND.value, error=e)
     except Exception as e:
         initiate_error_handler(message="could not fetch user", errCode=ErrorCodes.BROAD_DATABASE_ERROR.value, error=e)
 
