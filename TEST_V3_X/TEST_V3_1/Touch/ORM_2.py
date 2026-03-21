@@ -1,5 +1,5 @@
 from Utility.pypolice.master_validator import UserName
-from Touch.orm_schema import Users
+from Touch.orm_schema import Users, RunningSessions
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from Utility.ErrorHandler import initiate_error_handler, ErrorCodes
@@ -16,18 +16,26 @@ async def fetch_line(uname: UserName) -> Users | None:
         async with AsyncSession(engine) as session:
             stmt = select(Users).where(Users.uname == uname.value)
             line_object = await session.execute(stmt)
-            return line_object.scalar_one_or_none()
+            result = line_object.scalar_one_or_none()
+            return result
     except Exception as e:
         initiate_error_handler(message="could not fetch user", errCode=ErrorCodes.BROAD_DATABASE_ERROR.value, error=e)
 
-async def new_session(session_token: UUID, user: Users | None) -> bool | None:
+async def new_session(session_token: UUID, user: Users) -> bool | None:
     try:
-        if user is None:
-            initiate_error_handler(message="user not found", errCode=ErrorCodes.USER_NOT_FOUND.value, error=ValueError("user not found"))
         async with AsyncSession(engine) as session:
-            new_session_entry = Users(token = session_token, user_id = user)
+            new_session_entry = RunningSessions(token = session_token, user_id = user.id)
             session.add(new_session_entry)
             await session.commit()
             return True
     except Exception as e:
         initiate_error_handler(message="could not create session", errCode=ErrorCodes.CANNOT_CREATE_SESSION.value, error=e)
+
+async def does_session_exist(user: Users):
+    try:
+        async with AsyncSession(engine) as session:
+            stmt = select(RunningSessions).where(RunningSessions.user_id == user.id)
+            result = await session.execute(stmt)
+            return result.scalar_one_or_none is not None
+    except Exception as e:
+        initiate_error_handler(message="could not check session", errCode=ErrorCodes.BROAD_DATABASE_ERROR.value, error=e)
