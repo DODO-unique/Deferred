@@ -3,9 +3,14 @@ docstring for session manager
 
 manage sessions. Tasks seperated into functions
 '''
-from Touch.ORM_2 import fetch_line
+from Touch.ORM_2 import fetch_line, new_session
 from Utility.pypolice.master_validator import UserName
+from Utility.logger import loggy
+from uuid import uuid4
+from Utility.ErrorHandler import initiate_error_handler, ErrorCodes
 
+def log(msg: str) -> None:
+    loggy("Sessions/session_manager", msg)
 
 async def create_session(uname: UserName):
     '''
@@ -24,6 +29,12 @@ async def create_session(uname: UserName):
     '''
     # this returns a ScalarResult object. We can pass it as model
     select_object = await fetch_line(uname= uname)
-    
-    
-    pass
+
+    token = uuid4()
+
+    # create a new session!
+    result = await new_session(session_token=token, user = select_object)
+    if result:
+        log("created new session; returning token to Verification")
+        return token
+    initiate_error_handler(message="could not create session", errCode=ErrorCodes.CANNOT_CREATE_SESSION.value, error=ValueError("could not create session"))
