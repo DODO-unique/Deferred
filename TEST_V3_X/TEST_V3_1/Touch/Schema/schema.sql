@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY,
-    uname TEXT NOT NULL,
+    uname TEXT UNIQUE NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS running_sessions (
     id UUID PRIMARY KEY,
-    user_id UUID REFERENCES users(id),
+    user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     token TEXT UNIQUE NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     expires_at TIMESTAMPTZ NOT NULL DEFAULT now() + INTERVAL '1 hour'
@@ -25,8 +25,7 @@ END$$;
 
 CREATE TABLE IF NOT EXISTS scheduled_messages (
     id UUID PRIMARY KEY,
-    user_id UUID REFERENCES users(id),
-    email TEXT NOT NULL,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     prompt TEXT NOT NULL,
     execute_at TIMESTAMPTZ NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
