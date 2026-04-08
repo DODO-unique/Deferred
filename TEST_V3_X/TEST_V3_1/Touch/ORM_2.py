@@ -41,6 +41,28 @@ async def does_session_exist(user_row: Users):
         async with AsyncSession(engine) as session:
             stmt = select(RunningSessions).where(RunningSessions.user_id == user_row.id)
             result = await session.execute(stmt)
-            return result.scalar_one_or_none is not None
+            return result.scalar_one_or_none() is not None
     except Exception as e:
         initiate_error_handler(message="could not check session", errCode=ErrorCodes.BROAD_DATABASE_ERROR.value, error=e)
+
+async def get_session(user_row: Users):
+    try:
+        async with AsyncSession(engine) as session:
+            stmt = select(RunningSessions).where(RunningSessions.user_id == user_row.id)
+            result = await session.execute(stmt)
+            return result.scalar_one_or_none()
+    except Exception as e:
+        initiate_error_handler(message="could not get session", errCode=ErrorCodes.BROAD_DATABASE_ERROR.value, error=e)
+
+
+async def remove_session(user_row: Users):
+    try:
+        async with AsyncSession(engine) as session:
+            stmt = select(RunningSessions).where(RunningSessions.user_id == user_row.id)
+            result = await session.execute(stmt)
+            session.delete(result.scalar_one())
+            std_out = await session.commit()
+            log(std_out)
+            return True
+    except Exception as e:
+        initiate_error_handler(message="could not remove session", errCode=ErrorCodes.BROAD_DATABASE_ERROR.value, error=e)

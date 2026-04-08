@@ -8,6 +8,7 @@ from Utility.pypolice.master_validator import UserName, Password
 from Auth.common.hashing import verify_password
 from Auth.common.username_check import check_username
 from Utility.ErrorHandler import initiate_error_handler, ErrorCodes
+from Sessions.session_manager_2 import is_session_running, kill_session
 
 # take uname and password
 
@@ -26,4 +27,9 @@ async def verification(uname: UserName, password: Password):
         initiate_error_handler(message="Incorrect password", errCode=ErrorCodes.INCORRECT_PASSWORD.value, error=ValueError("Incorrect password"))
 
     # at this point it means the credentials are correct. Verification complete.
+    
+    # check if user already has a session under their name
+    if await is_session_running(uname):
+        #if yes then give the same session key to them
     # now we create a session for the user.
+
