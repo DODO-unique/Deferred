@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- 1:1 relationship
 CREATE TABLE IF NOT EXISTS running_sessions (
     id UUID PRIMARY KEY,
     user_id UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -23,6 +24,7 @@ BEGIN
     END IF;
 END$$;
 
+-- M:1 relationship
 CREATE TABLE IF NOT EXISTS scheduled_messages (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
